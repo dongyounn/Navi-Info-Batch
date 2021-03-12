@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+# Project exclude paths
+/.gradle/
+/build/
+.idea/modules/
+/log/
