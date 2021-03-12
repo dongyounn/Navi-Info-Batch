@@ -1,0 +1,31 @@
+spring:
+  main:
+    banner-mode: "off"
+  application:
+    name: JUSO_BATCH
+  datasource:
+    hikari:
+      username: springboot
+      password: springboot
+      jdbc-url: jdbc:oracle:thin:@localhost:1521:XE
+      driver-class-name: oracle.jdbc.OracleDriver
+      validationTimeout: 10000
+      minimumIdle: 10
+      maximumPoolSize: 50
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    database: ORACLE
+    show-sql: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+    hibernate:
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      ddl-auto: validate
+  batch:
+    job:
+      enabled: true
