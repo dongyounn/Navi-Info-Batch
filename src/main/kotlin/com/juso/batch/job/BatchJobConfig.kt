@@ -1,5 +1,6 @@
 package com.juso.batch.job
 
+import com.juso.batch.domain.FileDataModel
 import com.juso.batch.domain.MatchBuild
 import org.slf4j.Logger
 import org.springframework.batch.core.Job
@@ -35,38 +36,46 @@ class BatchJobConfig(
 ) {
 
     @Bean
-    fun matchBuildReader(): FlatFileItemReader<Map<String, String>> {
-        val flatFileItemReader = FlatFileItemReader<Map<String, String>>()
-        flatFileItemReader.setResource(FileSystemResource("match_build.TXT"))
-        flatFileItemReader.setLinesToSkip(1)
-        flatFileItemReader.setEncoding("euc-kr")
-        val delimitedLineTokenizer = DelimitedLineTokenizer()
-        delimitedLineTokenizer.setDelimiter("|")
-        delimitedLineTokenizer.setNames("eupMyunDongCode", "siDoNm", "siGunGuNm",
-                "eupMyunDongNm", "roadNmCode", "roadNm",
-                "underYn", "buildingMain", "buildingSub",
-                "zipCode", "managementNo", "siGunGuBuilding",
-                "buildingSep", "adminDongCode", "adminDongName",
-                "upper", "lower", "coYn",
-                "buildingCount", "buildingNmDetail", "bldNmChangeHistory",
-                "bldNmChangeHisDetail", "liveYn", "centerLat",
-                "centerLon", "entLat", "entLon",
-                "siDoNmEnt", "siGunGuNmEng", "eupMyunDongNmEng",
-                "roadNmEng", "eupMyunDongYn", "changeCode")
-        val defaultLineMapper = DefaultLineMapper<Map<String, String>>()
-        defaultLineMapper.setLineTokenizer(delimitedLineTokenizer)
-        val beanWrapperFieldSetMapper = BeanWrapperFieldSetMapper<Map<String, String>>()
-        // todo 여기서 mapper data class 만들어줘서 넣어줘야 한다.
-        beanWrapperFieldSetMapper.setTargetType(Map)
-        defaultLineMapper.setFieldSetMapper(beanWrapperFieldSetMapper)
-        flatFileItemReader.setLineMapper(defaultLineMapper)
-        return flatFileItemReader
-//        return FlatFileItemReaderBuilder<Map<String, String>>()
-//                .name("matchBuild")
-//                .linesToSkip(1)
-//                .delimited()
-//                .lineTokenizer()
-//                .build()
+    fun matchBuildReader(): FlatFileItemReader<FileDataModel> {
+        return FlatFileItemReaderBuilder<FileDataModel>()
+                .name("matchBuildReader")
+                .resource(FileSystemResource("match_build.TXT"))
+                .encoding("euc-kr")
+                .delimited().delimiter("|")
+                .names("eupMyunDongCode", "siDoNm", "siGunGuNm",
+                        "eupMyunDongNm", "roadNmCode", "roadNm",
+                        "underYn", "buildingMain", "buildingSub",
+                        "zipCode", "managementNo", "siGunGuBuilding",
+                        "buildingSep", "adminDongCode", "adminDongName",
+                        "upper", "lower", "coYn",
+                        "buildingCount", "buildingNmDetail", "bldNmChangeHistory",
+                        "bldNmChangeHisDetail", "liveYn", "centerLat",
+                        "centerLon", "entLat", "entLon",
+                        "siDoNmEnt", "siGunGuNmEng", "eupMyunDongNmEng",
+                        "roadNmEng", "eupMyunDongYn", "changeCode")
+                .targetType(FileDataModel::class.java)
+                .build()
+//        val flatFileItemReader = FlatFileItemReader<FileDataModel>()
+//        flatFileItemReader.setResource()
+//        flatFileItemReader.setLinesToSkip(1)
+//        flatFileItemReader.setEncoding("euc-kr")
+//        val delimitedLineTokenizer = DelimitedLineTokenizer()
+//        delimitedLineTokenizer.setDelimiter("|")
+//        delimitedLineTokenizer.setNames()
+//        val defaultLineMapper = DefaultLineMapper<FileDataModel>()
+//        defaultLineMapper.setLineTokenizer(delimitedLineTokenizer)
+//        val beanWrapperFieldSetMapper = BeanWrapperFieldSetMapper<FileDataModel>()
+//        // todo 여기서 mapper data class 해줬는데도 안된다....
+//        beanWrapperFieldSetMapper.setTargetType(FileDataModel::class.java)
+//        defaultLineMapper.setFieldSetMapper(beanWrapperFieldSetMapper)
+//        flatFileItemReader.setLineMapper(defaultLineMapper)
+//        return flatFileItemReader
+////        return FlatFileItemReaderBuilder<Map<String, String>>()
+////                .name("matchBuild")
+////                .linesToSkip(1)
+////                .delimited()
+////                .lineTokenizer()
+////                .build()
     }
 
 
@@ -94,7 +103,7 @@ class BatchJobConfig(
     @Bean
     fun stepConfig(): Step {
         return stepBuilderFactory.get("matchBuildStep")
-                .chunk<Map<String, String>, MatchBuild>(500)
+                .chunk<FileDataModel, MatchBuild>(500)
                 .reader(matchBuildReader())
                 .processor(matchBuildProcessor)
                 .writer(matchBuildWriter)
