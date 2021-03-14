@@ -10,13 +10,11 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.item.file.FlatFileItemReader
 import org.springframework.batch.item.file.MultiResourceItemReader
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder
-import org.springframework.batch.item.file.builder.MultiResourceItemReaderBuilder
 import org.springframework.batch.item.file.mapping.RecordFieldSetMapper
 import org.springframework.batch.repeat.RepeatStatus
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 
 
@@ -33,12 +31,33 @@ class BatchJobConfig(
     @Value("\${chunk.size}")
     private val chunkSize = 500
 
+    @Value("file:/Users/dongyoun_shin/IdeaProjects/batch/batchdata/*.txt")
+    private val inputFiles: Array<Resource> = arrayOf()
+
+
+    //    @Value("*.TXT")
+//    private val inputResources: Array<Resource> = emptyArray()
+//
+//    @Bean
+//    fun multiResourceItemReader(): MultiResourceItemReader<FileDataModel> {
+//        return MultiResourceItemReaderBuilder<FileDataModel>()
+//                .resources(*inputResources)
+//                .delegate(matchBuildReader())
+//                .build()
+//    }
+    @Bean
+    fun multiResourceItemReader(): MultiResourceItemReader<FileDataModel> {
+        val reader: MultiResourceItemReader<FileDataModel> = MultiResourceItemReader()
+        reader.setDelegate(matchBuildReader())
+        reader.setResources(inputFiles)
+        return reader
+    }
 
     @Bean
     fun matchBuildReader(): FlatFileItemReader<FileDataModel> {
         return FlatFileItemReaderBuilder<FileDataModel>()
                 .name("matchBuildReader")
-                .resource(FileSystemResource("match_build.TXT"))
+//                .resource(FileSystemResource("match_build.TXT"))
                 .encoding("euc-kr")
                 .delimited().delimiter("|")
                 .names("eupMyunDongCode", "siDoNm", "siGunGuNm",
@@ -83,7 +102,7 @@ class BatchJobConfig(
         return stepBuilderFactory.get("matchBuildStep")
                 .listener(chunkResultListener)
                 .chunk<FileDataModel, MatchBuild>(chunkSize)
-                .reader(matchBuildReader())
+                .reader(multiResourceItemReader())
                 .processor(matchBuildProcessor)
                 .writer(matchBuildWriter)
                 .build()
