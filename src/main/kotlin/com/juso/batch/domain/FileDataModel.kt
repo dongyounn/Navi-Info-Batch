@@ -29,7 +29,7 @@ data class FileDataModel(
         val centerLon: String?,
         val entLat: String?,
         val entLon: String?,
-        val siDoNmEnt: String?,
+        val siDoNmEng: String?,
         val siGunGuNmEng: String?,
         val eupMyunDongNmEng: String?,
         val roadNmEng: String?,
