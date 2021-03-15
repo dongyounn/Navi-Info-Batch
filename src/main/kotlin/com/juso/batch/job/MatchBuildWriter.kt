@@ -11,7 +11,12 @@ class MatchBuildWriter(
 ) : ItemWriter<MatchBuild> {
     override fun write(items: MutableList<out MatchBuild>) {
         items.forEach { target ->
-            matchBuildRepository.save(target)
+            /* TODO 이력 관리 하려면 어떻게 해야할까? */
+            matchBuildRepository.findByManagementNo(target.managementNo)?.let {
+//                여기서 위경도 변경 로직 추가하자
+                matchBuildRepository.save(target)
+            } ?: matchBuildRepository.save(target)
+
         }
     }
 }

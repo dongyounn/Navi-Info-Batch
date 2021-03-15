@@ -2,6 +2,7 @@ package com.juso.batch.job
 
 import com.juso.batch.domain.FileDataModel
 import com.juso.batch.domain.MatchBuild
+import org.slf4j.Logger
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing
@@ -34,17 +35,6 @@ class BatchJobConfig(
     @Value("file:/Users/dongyoun_shin/IdeaProjects/batch/batchdata/*.txt")
     private val inputFiles: Array<Resource> = arrayOf()
 
-
-    //    @Value("*.TXT")
-//    private val inputResources: Array<Resource> = emptyArray()
-//
-//    @Bean
-//    fun multiResourceItemReader(): MultiResourceItemReader<FileDataModel> {
-//        return MultiResourceItemReaderBuilder<FileDataModel>()
-//                .resources(*inputResources)
-//                .delegate(matchBuildReader())
-//                .build()
-//    }
     @Bean
     fun multiResourceItemReader(): MultiResourceItemReader<FileDataModel> {
         val reader: MultiResourceItemReader<FileDataModel> = MultiResourceItemReader()
