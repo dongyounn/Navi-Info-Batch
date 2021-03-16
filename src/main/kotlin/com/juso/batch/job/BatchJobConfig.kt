@@ -90,11 +90,11 @@ class BatchJobConfig(
     @Bean
     fun stepConfig(): Step {
         return stepBuilderFactory.get("matchBuildStep")
-                .listener(chunkResultListener)
                 .chunk<FileDataModel, MatchBuild>(chunkSize)
                 .reader(multiResourceItemReader())
                 .processor(matchBuildProcessor)
                 .writer(matchBuildWriter)
+                .listener(chunkResultListener)
                 .build()
     }
 }

@@ -41,5 +41,29 @@ data class MatchBuild(
         var eupMyunDongNmEng: String?,
         var roadNmEng: String?,
         var eupMyunDongYn: String?,
-        var changeCode: String?
-)
+        var changeCode: String?,
+
+        var centerLatitude: BigDecimal?,
+        var centerLongitude: BigDecimal?,
+        var enterLatitude: BigDecimal?,
+        var enterLongitude: BigDecimal?
+) {
+    fun ofCenterLocation(
+            latitude: BigDecimal?,
+            longitude: BigDecimal?
+    ): MatchBuild {
+        this.centerLatitude = latitude
+        this.centerLongitude = longitude
+        return this
+    }
+
+    fun ofEnterLocation(
+            latitude: BigDecimal?,
+            longitude: BigDecimal?
+    ): MatchBuild {
+        this.enterLatitude = latitude
+        this.enterLongitude = longitude
+        return this
+    }
+
+}

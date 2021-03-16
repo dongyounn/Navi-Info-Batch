@@ -17,15 +17,10 @@ class ChunkResultListener(
         private val log: Logger
 ) : ChunkListener {
 
-    @Value("\${chunk.size}")
-    private val chunkSize = 500
-
-    private var count = 1
-
     override fun afterChunk(context: ChunkContext) {
-        log.info("### End Chunk : ${chunkSize.times(count)}")
-        log.info("==========================================")
-        count++
+        log.info("### End Chunk Time : ${context.stepContext.stepExecution.endTime}")
+        log.info("### End Chunk Count: ${context.stepContext.stepExecution.readCount}")
+        log.info("=====================================================================")
     }
 
 
@@ -33,6 +28,7 @@ class ChunkResultListener(
     }
 
     override fun beforeChunk(context: ChunkContext) {
-        log.info("### Start Chunk : ${chunkSize.times(count)}")
+        log.info("=====================================================================")
+        log.info("### Start Chunk Time : ${context.stepContext.stepExecution.startTime}")
     }
 }
