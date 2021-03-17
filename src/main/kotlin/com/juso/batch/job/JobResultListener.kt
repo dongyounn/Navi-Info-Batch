@@ -10,10 +10,10 @@ class JobResultListener(
         private val log: Logger
 ) : JobExecutionListener {
     override fun beforeJob(jobExecution: JobExecution) {
-        log.info("시작")
+        log.info("주소 배치 시작 하즈아~~~")
     }
 
     override fun afterJob(jobExecution: JobExecution) {
-        log.info("끝")
+        log.info("주소 배치 끝났드아아~~~~~")
     }
 }

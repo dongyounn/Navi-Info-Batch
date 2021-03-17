@@ -1,8 +1,8 @@
 package com.juso.batch.job
 
-import com.juso.batch.domain.FileDataModel
+import com.juso.batch.domain.JibunBuildDataModel
 import com.juso.batch.domain.MatchBuild
-import org.slf4j.Logger
+import com.juso.batch.domain.MatchBuildDataModel
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing
@@ -32,22 +32,32 @@ class BatchJobConfig(
     @Value("\${chunk.size}")
     private val chunkSize = 500
 
-    @Value("file:/Users/dongyoun_shin/IdeaProjects/batch/batchdata/*.txt")
-    private val inputFiles: Array<Resource> = arrayOf()
+    @Value("file:/Users/dongyoun_shin/IdeaProjects/batch/batchdata/match_build_*.txt")
+    private val matchBuildFiles: Array<Resource> = arrayOf()
+
+    @Value("file:/Users/dongyoun_shin/IdeaProjects/batch/batchdata/match_jibun*.txt")
+    private val jibunBuildFiles: Array<Resource> = arrayOf()
 
     @Bean
-    fun multiResourceItemReader(): MultiResourceItemReader<FileDataModel> {
-        val reader: MultiResourceItemReader<FileDataModel> = MultiResourceItemReader()
+    fun matchMultiResourceItemReader(): MultiResourceItemReader<MatchBuildDataModel> {
+        val reader: MultiResourceItemReader<MatchBuildDataModel> = MultiResourceItemReader()
         reader.setDelegate(matchBuildReader())
-        reader.setResources(inputFiles)
+        reader.setResources(matchBuildFiles)
         return reader
     }
 
     @Bean
-    fun matchBuildReader(): FlatFileItemReader<FileDataModel> {
-        return FlatFileItemReaderBuilder<FileDataModel>()
+    fun jibunMultiResourceItemReader(): MultiResourceItemReader<JibunBuildDataModel> {
+        val reader: MultiResourceItemReader<JibunBuildDataModel> = MultiResourceItemReader()
+        reader.setDelegate(jiBunReader())
+        reader.setResources(jibunBuildFiles)
+        return reader
+    }
+
+    @Bean
+    fun matchBuildReader(): FlatFileItemReader<MatchBuildDataModel> {
+        return FlatFileItemReaderBuilder<MatchBuildDataModel>()
                 .name("matchBuildReader")
-//                .resource(FileSystemResource("match_build.TXT"))
                 .encoding("euc-kr")
                 .delimited().delimiter("|")
                 .names("eupMyunDongCode", "siDoNm", "siGunGuNm",
@@ -61,7 +71,24 @@ class BatchJobConfig(
                         "centerLon", "entLat", "entLon",
                         "siDoNmEng", "siGunGuNmEng", "eupMyunDongNmEng",
                         "roadNmEng", "eupMyunDongYn", "changeCode")
-                .fieldSetMapper(RecordFieldSetMapper<FileDataModel>(FileDataModel::class.java))
+                .fieldSetMapper(RecordFieldSetMapper<MatchBuildDataModel>(MatchBuildDataModel::class.java))
+                .build()
+    }
+
+    @Bean
+    fun jiBunReader(): FlatFileItemReader<JibunBuildDataModel> {
+        return FlatFileItemReaderBuilder<JibunBuildDataModel>()
+                .name("jiBunMatch")
+                .encoding("euc-kr")
+                .delimited().delimiter("|")
+                .names("legalDongCode", "siDoNm", "siGunGuNm",
+                        "eupMyunDongNm", "liNm", "mntYn",
+                        "mainJiNum", "subJiNum", "roadNmCode",
+                        "underYn", "buildMain", "buildSub",
+                        "jiBunSerialNo", "siDoNmEng", "siGunGuNmEng",
+                        "eupMyunDongNmEng", "liNmEng", "changeReason",
+                        "buildManagementNo", "jusoAreaCode")
+                .fieldSetMapper(RecordFieldSetMapper<JibunBuildDataModel>(JibunBuildDataModel::class.java))
                 .build()
     }
 
@@ -90,8 +117,8 @@ class BatchJobConfig(
     @Bean
     fun stepConfig(): Step {
         return stepBuilderFactory.get("matchBuildStep")
-                .chunk<FileDataModel, MatchBuild>(chunkSize)
-                .reader(multiResourceItemReader())
+                .chunk<MatchBuildDataModel, MatchBuild>(chunkSize)
+                .reader(matchMultiResourceItemReader())
                 .processor(matchBuildProcessor)
                 .writer(matchBuildWriter)
                 .listener(chunkResultListener)

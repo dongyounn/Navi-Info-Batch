@@ -1,7 +1,7 @@
 package com.juso.batch.domain
 
 
-data class FileDataModel(
+data class MatchBuildDataModel(
         val eupMyunDongCode: String?,
         val siDoNm: String?,
         val siGunGuNm: String?,
@@ -36,3 +36,28 @@ data class FileDataModel(
         val eupMyunDongYn: String?,
         val changeCode: String?
 )
+
+
+data class JibunBuildDataModel(
+        val legalDongCode: String?,
+        val siDoNm: String?,
+        val siGunGuNm: String?,
+        val eupMyunDongNm: String?,
+        val liNm: String?,
+        val mntYn: String?,
+        val mainJiNum: String?,
+        val subJiNum: String?,
+        val roadNmCode: String?,
+        val underYn: String?,
+        val buildMain: String?,
+        val buildSub: String?,
+        val jiBunSerialNo: String?,
+        val siDoNmEng: String?,
+        val siGunGuNmEng: String?,
+        val eupMyunDongNmEng: String?,
+        val liNmEng: String?,
+        val changeReason: String?,
+        val buildManagementNo: String?,
+        val jusoAreaCode: String?
+)
+

@@ -14,11 +14,9 @@ class DataSourceConfig {
     @Bean
     @Primary
     fun getDataSource(hikariProperties: HikariProperties): HikariDataSource {
-        val password = hikariProperties.password
-
         val hikariConfig = HikariConfig()
         hikariConfig.username = hikariProperties.username
-        hikariConfig.password = password
+        hikariConfig.password = hikariProperties.password
         hikariConfig.jdbcUrl = hikariProperties.jdbcUrl
         hikariConfig.driverClassName = hikariProperties.driverClassName
         hikariConfig.validationTimeout = hikariProperties.validationTimeout
@@ -27,7 +25,6 @@ class DataSourceConfig {
 
         return HikariDataSource(hikariConfig)
     }
-
 
     @Bean("CustomTransactionManager")
     fun transactionManager(entityManagerFactory: EntityManagerFactory): PlatformTransactionManager {

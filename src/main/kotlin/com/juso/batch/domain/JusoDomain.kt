@@ -1,9 +1,8 @@
 package com.juso.batch.domain
 
+import java.io.Serializable
 import java.math.BigDecimal
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "MATCH_BUILD")
@@ -65,5 +64,67 @@ data class MatchBuild(
         this.enterLongitude = longitude
         return this
     }
+}
 
+
+@Entity
+@Table(name = "JIBUN_BUILD")
+data class JibunBuild(
+        @EmbeddedId
+        val jiBunId: JibunPk,
+        val legalDongCode: String?,
+        val siDoNm: String?,
+        val siGunGuNm: String?,
+        val eupMyunDongNm: String?,
+        val liNm: String?,
+        val mntYn: String?,
+        val mainJiNum: String?,
+        val subJiNum: String?,
+        val siDoNmEng: String?,
+        val siGunGuNmEng: String?,
+        val eupMyunDongNmEng: String?,
+        val liNmEng: String?,
+        val changeReason: String?,
+        val buildManagementNo: String?,
+) {
+    companion object {
+        fun of(req: JibunBuildDataModel) = JibunBuild(
+                legalDongCode = req.legalDongCode,
+                siDoNm = req.siDoNm,
+                siGunGuNm = req.siGunGuNm,
+                eupMyunDongNm = req.eupMyunDongNm,
+                liNm = req.liNm,
+                mntYn = req.mntYn,
+                mainJiNum = req.mainJiNum,
+                subJiNum = req.subJiNum,
+                siDoNmEng = req.siDoNmEng,
+                siGunGuNmEng = req.siGunGuNmEng,
+                eupMyunDongNmEng = req.eupMyunDongNmEng,
+                liNmEng = req.liNmEng,
+                changeReason = req.changeReason,
+                buildManagementNo = req.buildManagementNo,
+                jiBunId = JibunPk.of(req)
+        )
+    }
+}
+
+@Embeddable
+data class JibunPk(
+        var roadNmCode: String,
+        var underYn: String,
+        var buildMain: String,
+        var buildSub: String,
+        var jiBunSerialNo: String,
+        var jusoAreaCode: String
+) : Serializable {
+    companion object {
+        fun of(req: JibunBuildDataModel) = JibunPk(
+                roadNmCode = req.roadNmCode!!,
+                underYn = req.underYn!!,
+                buildMain = req.buildMain!!,
+                buildSub = req.buildSub!!,
+                jiBunSerialNo = req.jiBunSerialNo!!,
+                jusoAreaCode = req.jusoAreaCode!!
+        )
+    }
 }
