@@ -1,6 +1,8 @@
 package com.juso.batch.job
 
+import com.juso.batch.domain.JibunBuild
 import com.juso.batch.domain.MatchBuild
+import com.juso.batch.infra.repository.JibunMatchRepository
 import com.juso.batch.infra.repository.MatchBuildRepository
 import org.springframework.batch.item.ItemWriter
 import org.springframework.stereotype.Component
@@ -24,6 +26,17 @@ class MatchBuildWriter(
                 }
             }
             matchBuildRepository.save(it)
+        }
+    }
+}
+
+@Component
+class JibunBuildWriter(
+        private val jibunBuildRepository: JibunMatchRepository
+) : ItemWriter<JibunBuild> {
+    override fun write(items: MutableList<out JibunBuild>) {
+        items.forEach {
+            jibunBuildRepository.save(it)
         }
     }
 }

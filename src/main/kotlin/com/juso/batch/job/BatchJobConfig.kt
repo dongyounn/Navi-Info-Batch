@@ -1,5 +1,6 @@
 package com.juso.batch.job
 
+import com.juso.batch.domain.JibunBuild
 import com.juso.batch.domain.JibunBuildDataModel
 import com.juso.batch.domain.MatchBuild
 import com.juso.batch.domain.MatchBuildDataModel
@@ -27,7 +28,9 @@ class BatchJobConfig(
         private val stepBuilderFactory: StepBuilderFactory,
         private val jobBuilderFactory: JobBuilderFactory,
         private val jobResultListener: JobResultListener,
-        private val chunkResultListener: ChunkResultListener
+        private val chunkResultListener: ChunkResultListener,
+        private val jibunBuildProcessor: JibunBuildProcessor,
+        private val jibunBuildWriter: JibunBuildWriter
 ) {
     @Value("\${chunk.size}")
     private val chunkSize = 500
@@ -98,7 +101,7 @@ class BatchJobConfig(
         return jobBuilderFactory.get("matchBuildJob")
                 .listener(jobResultListener)
                 .flow(getInitState())
-                .next(stepConfig())
+                .next(buildMatchStep())
                 .end()
                 .build()
     }
@@ -115,12 +118,23 @@ class BatchJobConfig(
     }
 
     @Bean
-    fun stepConfig(): Step {
+    fun buildMatchStep(): Step {
         return stepBuilderFactory.get("matchBuildStep")
                 .chunk<MatchBuildDataModel, MatchBuild>(chunkSize)
                 .reader(matchMultiResourceItemReader())
                 .processor(matchBuildProcessor)
                 .writer(matchBuildWriter)
+                .listener(chunkResultListener)
+                .build()
+    }
+
+    @Bean
+    fun jibunMatchStep(): Step {
+        return stepBuilderFactory.get("jibunBuildStep")
+                .chunk<JibunBuildDataModel, JibunBuild>(chunkSize)
+                .reader(jibunMultiResourceItemReader())
+                .processor(jibunBuildProcessor)
+                .writer(jibunBuildWriter)
                 .listener(chunkResultListener)
                 .build()
     }
