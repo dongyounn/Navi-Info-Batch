@@ -119,12 +119,12 @@ data class JibunPk(
 ) : Serializable {
     companion object {
         fun of(req: JibunBuildDataModel) = JibunPk(
-                roadNmCode = req.roadNmCode!!,
-                underYn = req.underYn!!,
-                buildMain = req.buildMain!!,
-                buildSub = req.buildSub!!,
-                jiBunSerialNo = req.jiBunSerialNo!!,
-                jusoAreaCode = req.jusoAreaCode!!
+                roadNmCode = req.roadNmCode,
+                underYn = req.underYn,
+                buildMain = req.buildMain,
+                buildSub = req.buildSub,
+                jiBunSerialNo = req.jiBunSerialNo,
+                jusoAreaCode = req.jusoAreaCode
         )
     }
 }

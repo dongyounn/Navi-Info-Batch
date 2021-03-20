@@ -102,6 +102,7 @@ class BatchJobConfig(
                 .listener(jobResultListener)
                 .flow(getInitState())
                 .next(buildMatchStep())
+                .next(jibunMatchStep())
                 .end()
                 .build()
     }
