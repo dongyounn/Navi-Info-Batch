@@ -35,10 +35,10 @@ class BatchJobConfig(
     @Value("\${chunk.size}")
     private val chunkSize = 500
 
-    @Value("file:/Users/dongyoun_shin/IdeaProjects/batch/batchdata/match_build_*.txt")
+    @Value("file:./batchdata/match_build_*.txt")
     private val matchBuildFiles: Array<Resource> = arrayOf()
 
-    @Value("file:/Users/dongyoun_shin/IdeaProjects/batch/batchdata/match_jibun*.txt")
+    @Value("file:./batchdata/match_jibun*.txt")
     private val jibunBuildFiles: Array<Resource> = arrayOf()
 
     @Bean

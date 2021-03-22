@@ -78,7 +78,7 @@ data class JibunBuild(
         val eupMyunDongNm: String?,
         val liNm: String?,
         val mntYn: String?,
-        val mainJiNum: String?,
+        val mainJiNum: Long?,
         val subJiNum: String?,
         val siDoNmEng: String?,
         val siGunGuNmEng: String?,
@@ -95,7 +95,7 @@ data class JibunBuild(
                 eupMyunDongNm = req.eupMyunDongNm,
                 liNm = req.liNm,
                 mntYn = req.mntYn,
-                mainJiNum = req.mainJiNum,
+                mainJiNum = req.mainJiNum?.toLong(),
                 subJiNum = req.subJiNum,
                 siDoNmEng = req.siDoNmEng,
                 siGunGuNmEng = req.siGunGuNmEng,
@@ -112,18 +112,18 @@ data class JibunBuild(
 data class JibunPk(
         var roadNmCode: String,
         var underYn: String,
-        var buildMain: String,
-        var buildSub: String,
-        var jiBunSerialNo: String,
+        var buildMain: Long,
+        var buildSub: Long,
+        var jiBunSerialNo: Long,
         var jusoAreaCode: String
 ) : Serializable {
     companion object {
         fun of(req: JibunBuildDataModel) = JibunPk(
                 roadNmCode = req.roadNmCode,
                 underYn = req.underYn,
-                buildMain = req.buildMain,
-                buildSub = req.buildSub,
-                jiBunSerialNo = req.jiBunSerialNo,
+                buildMain = req.buildMain.toLong(),
+                buildSub = req.buildSub.toLong(),
+                jiBunSerialNo = req.jiBunSerialNo.toLong(),
                 jusoAreaCode = req.jusoAreaCode
         )
     }

@@ -18,7 +18,7 @@ class ChunkResultListener(
 ) : ChunkListener {
 
     override fun afterChunk(context: ChunkContext) {
-        log.info("### End Chunk Time : ${context.stepContext.stepExecution.endTime}")
+        log.info("### End Chunk Time : ${context.stepContext.stepExecution.lastUpdated}")
         log.info("### End Chunk Count: ${context.stepContext.stepExecution.readCount}")
         log.info("=====================================================================")
     }
