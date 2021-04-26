@@ -28,10 +28,6 @@ repositories {
 }
 
 dependencies {
-    implementation("com.querydsl:querydsl-jpa:4.4.0")
-    implementation("com.querydsl:querydsl-apt:4.4.0")
-    implementation("com.querydsl:querydsl-sql-spring:4.4.0")
-    kapt("com.querydsl:querydsl-apt:4.4.0:jpa")
     implementation("org.springframework.boot:spring-boot-starter-batch")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -55,15 +51,13 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-val querydslSourcesDir = file("src/main/generated")
-
 sourceSets {
     main {
         java {
-            listOf("src/main/java", querydslSourcesDir)
+            listOf("src/main/java")
         }
         kotlin {
-            listOf("src/main/kotlin", querydslSourcesDir)
+            listOf("src/main/kotlin")
         }
     }
 }
