@@ -21,12 +21,12 @@ class MatchBuildWriter(
             } else {
                 if (it.entLat != null && it.entLon != null) {
                     convert.CRSConverter(it.entLat!!, it.entLon!!).let { location ->
-                        it.ofEnterLocation(BigDecimal.valueOf(location.x), BigDecimal.valueOf(location.y))
+                        it.ofEnterLocation(BigDecimal.valueOf(location.y), BigDecimal.valueOf(location.x))
                     }
                 }
                 if (it.centerLat != null && it.centerLon != null) {
                     convert.CRSConverter(it.centerLat!!, it.centerLon!!).let { location ->
-                        it.ofCenterLocation(BigDecimal.valueOf(location.x), BigDecimal.valueOf(location.y))
+                        it.ofCenterLocation(BigDecimal.valueOf(location.y), BigDecimal.valueOf(location.x))
                     }
                 }
                 matchBuildRepository.save(it)
